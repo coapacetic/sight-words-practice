@@ -177,6 +177,43 @@ footer {
     opacity: 0.9;
 }
 
+.score-history {
+    background: rgba(255,255,255,0.2);
+    padding: 20px 30px;
+    border-radius: 25px;
+    margin-top: 15px;
+    backdrop-filter: blur(10px);
+    text-align: center;
+}
+
+.score-history h3 {
+    font-size: 1.3rem;
+    margin-bottom: 12px;
+}
+
+.score-history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.score-history-row {
+    display: flex;
+    justify-content: space-between;
+    background: rgba(255,255,255,0.15);
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-size: 1rem;
+}
+
+.score-history-summary {
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255,255,255,0.3);
+}
+
 @media (max-width: 768px) {
     .cards-grid {
         grid-template-columns: repeat(3, 1fr);

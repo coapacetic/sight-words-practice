@@ -31,9 +31,13 @@ class SightWordsGame {
         this.scoreDisplay = document.getElementById('scoreDisplay');
         this.scorePercentage = document.getElementById('scorePercentage');
         this.scoreMessage = document.getElementById('scoreMessage');
+        this.scoreHistoryEl = document.getElementById('scoreHistory');
+        this.scoreHistoryList = document.getElementById('scoreHistoryList');
+        this.averageScoreEl = document.getElementById('averageScore');
         this.cards = [];
         this.attemptedCards = new Set();
         this.currentWords = [];
+        this.scoreHistory = [];
         
         this.init();
     }
@@ -154,8 +158,27 @@ class SightWordsGame {
         this.scoreMessage.textContent = message;
         this.scoreDisplay.style.display = 'block';
         
-        // Scroll to score display
-        this.scoreDisplay.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        this.scoreHistory.push({ round: this.scoreHistory.length + 1, percentage });
+        this.renderScoreHistory();
+        
+        this.scoreHistoryEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    
+    renderScoreHistory() {
+        this.scoreHistoryList.innerHTML = '';
+        
+        this.scoreHistory.forEach((entry) => {
+            const row = document.createElement('div');
+            row.className = 'score-history-row';
+            row.innerHTML = `<span>Round ${entry.round}</span><span>${entry.percentage}%</span>`;
+            this.scoreHistoryList.appendChild(row);
+        });
+        
+        const avg = Math.round(
+            this.scoreHistory.reduce((sum, e) => sum + e.percentage, 0) / this.scoreHistory.length
+        );
+        this.averageScoreEl.textContent = `${avg}%`;
+        this.scoreHistoryEl.style.display = 'block';
     }
 }
 
