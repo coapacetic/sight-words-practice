@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sight Words Fun</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Sight Words Practice</h1>
+            <p>Click on words when you can read them correctly!</p>
+            <div class="header-buttons">
+                <button id="newGame">New Game</button>
+                <button id="gradeBtn">Grade Performance</button>
+            </div>
+        </header>
+        
+        <main>
+            <div id="cardsContainer" class="cards-grid">
+                <!-- Cards will be generated here -->
+            </div>
+        </main>
+        
+        <footer>
+            <div class="stats">
+                <span id="attemptedCount">0</span> / <span id="totalCount">0</span> words attempted
+            </div>
+            <div id="scoreDisplay" class="score-display" style="display: none;">
+                <div class="score-text">Score: <span id="scorePercentage">0%</span></div>
+                <div class="score-message" id="scoreMessage"></div>
+            </div>
+        </footer>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
