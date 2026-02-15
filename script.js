@@ -21,6 +21,8 @@ const sightWords = [
     'letter', 'mother', 'answer', 'found', 'study', 'still', 'learn', 'should', 'America', 'world'
 ];
 
+const sparkleChars = ['\u2728', '\u2B50', '\uD83D\uDCAB', '\uD83C\uDF1F', '\uD83C\uDF08'];
+
 class SightWordsGame {
     constructor() {
         this.cardsContainer = document.getElementById('cardsContainer');
@@ -34,132 +36,134 @@ class SightWordsGame {
         this.cards = [];
         this.attemptedCards = new Set();
         this.currentWords = [];
-        
+
         this.init();
     }
-    
+
     init() {
         this.newGameBtn.addEventListener('click', () => this.startNewGame());
         this.gradeBtn.addEventListener('click', () => this.gradePerformance());
         this.startNewGame();
     }
-    
+
     startNewGame() {
-        // Clear existing cards
         this.cardsContainer.innerHTML = '';
         this.cards = [];
         this.attemptedCards.clear();
         this.currentWords = [];
-        
-        // Hide score display
+
         this.scoreDisplay.style.display = 'none';
-        
-        // Get 12 words
+
         const wordCount = 12;
         this.currentWords = this.getRandomWords(wordCount);
-        
-        // Create cards
+
         this.currentWords.forEach((word, index) => {
             this.createCard(word, index);
         });
-        
-        // Update stats
+
         this.updateStats();
     }
-    
+
     getRandomWords(count) {
         const shuffled = [...sightWords].sort(() => 0.5 - Math.random());
         return shuffled.slice(0, count);
     }
-    
+
     createCard(word, index) {
         const card = document.createElement('div');
         card.className = 'card';
         card.dataset.word = word;
         card.dataset.index = index;
-        
+
         const cardFront = document.createElement('div');
         cardFront.className = 'card-face card-front';
         cardFront.textContent = word;
-        
+
         const cardBack = document.createElement('div');
         cardBack.className = 'card-face card-back';
-        cardBack.innerHTML = `
-            <div class="checkmark">✓</div>
-            <div class="word-label">${word}</div>
-        `;
-        
+        cardBack.innerHTML = '<div class="checkmark">\uD83E\uDD84</div><div class="word-label">' + word + '</div>';
+
         card.appendChild(cardFront);
         card.appendChild(cardBack);
-        
-        // Add click event
+
         card.addEventListener('click', () => this.flipCard(card));
-        
+
         this.cardsContainer.appendChild(card);
         this.cards.push(card);
     }
-    
+
     flipCard(card) {
         if (card.classList.contains('flipped')) {
-            return; // Don't allow unflipping
+            return;
         }
-        
-        // Flip the card
+
         card.classList.add('flipped');
         this.attemptedCards.add(card.dataset.index);
-        
-        // Add a little celebration effect
+
         this.addCelebrationEffect(card);
-        
+
         this.updateStats();
     }
-    
+
     addCelebrationEffect(card) {
-        // Create a simple visual feedback
         card.style.transform = 'rotateY(180deg) scale(1.05)';
         setTimeout(() => {
             card.style.transform = 'rotateY(180deg) scale(1)';
         }, 200);
+
+        const rect = card.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        for (let i = 0; i < 5; i++) {
+            setTimeout(() => {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.textContent = sparkleChars[Math.floor(Math.random() * sparkleChars.length)];
+                sparkle.style.left = (centerX + (Math.random() - 0.5) * 60) + 'px';
+                sparkle.style.top = (centerY + (Math.random() - 0.5) * 60) + 'px';
+                document.body.appendChild(sparkle);
+
+                setTimeout(() => sparkle.remove(), 1000);
+            }, i * 80);
+        }
     }
-    
+
     updateStats() {
         const attempted = this.attemptedCards.size;
         const total = this.cards.length;
-        
+
         this.attemptedCountEl.textContent = attempted;
         this.totalCountEl.textContent = total;
     }
-    
+
     gradePerformance() {
         const score = this.attemptedCards.size;
         const total = this.cards.length;
         const percentage = Math.round((score / total) * 100);
-        
-        this.scorePercentage.textContent = `${percentage}%`;
-        
-        // Set message based on performance
+
+        this.scorePercentage.textContent = percentage + '%';
+
         let message = '';
         if (percentage === 100) {
-            message = '🌟 Perfect! You read all the words! 🌟';
+            message = '\uD83E\uDD84\u2728 Magical! You read ALL the words, unicorn superstar! \u2728\uD83E\uDD84';
         } else if (percentage >= 80) {
-            message = '🎉 Excellent work! Keep it up! 🎉';
+            message = '\uD83C\uDF08\u2B50 Amazing! The unicorns are so proud of you! \u2B50\uD83C\uDF08';
         } else if (percentage >= 60) {
-            message = '👍 Good job! Practice makes perfect! 👍';
+            message = '\uD83E\uDD84\uD83D\uDC96 Great job! Keep your unicorn magic going! \uD83D\uDC96\uD83E\uDD84';
         } else if (percentage >= 40) {
-            message = '💪 Nice try! Keep practicing! 💪';
+            message = '\u2728\uD83C\uDF1F Nice try! Every unicorn starts somewhere! \uD83C\uDF1F\u2728';
         } else {
-            message = '📚 Keep working hard! You\'ll get there! 📚';
+            message = '\uD83C\uDF08\uD83E\uDD84 Keep believing in your magic! You can do it! \uD83E\uDD84\uD83C\uDF08';
         }
-        
+
         this.scoreMessage.textContent = message;
         this.scoreDisplay.style.display = 'block';
-        
-        // Scroll to score display
+
         this.scoreDisplay.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 }
 
-// Start the game when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     new SightWordsGame();
 });
