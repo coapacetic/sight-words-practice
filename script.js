@@ -21,6 +21,20 @@ const sightWords = [
     'letter', 'mother', 'answer', 'found', 'study', 'still', 'learn', 'should', 'America', 'world'
 ];
 
+const STACK_COUNT = 5;
+const CARDS_PER_STACK = 12;
+
+function buildStacks(words, count) {
+    const perStack = Math.ceil(words.length / count);
+    const stacks = [];
+    for (let i = 0; i < count; i++) {
+        stacks.push(words.slice(i * perStack, (i + 1) * perStack));
+    }
+    return stacks;
+}
+
+const wordStacks = buildStacks(sightWords, STACK_COUNT);
+
 class SightWordsGame {
     constructor() {
         this.cardsContainer = document.getElementById('cardsContainer');
@@ -31,9 +45,11 @@ class SightWordsGame {
         this.scoreDisplay = document.getElementById('scoreDisplay');
         this.scorePercentage = document.getElementById('scorePercentage');
         this.scoreMessage = document.getElementById('scoreMessage');
+        this.stackSelector = document.getElementById('stackSelector');
         this.cards = [];
         this.attemptedCards = new Set();
         this.currentWords = [];
+        this.currentStack = 0;
         
         this.init();
     }
@@ -41,34 +57,56 @@ class SightWordsGame {
     init() {
         this.newGameBtn.addEventListener('click', () => this.startNewGame());
         this.gradeBtn.addEventListener('click', () => this.gradePerformance());
+        this.buildStackSelector();
+        this.startNewGame();
+    }
+    
+    buildStackSelector() {
+        for (let i = 0; i < STACK_COUNT; i++) {
+            const btn = document.createElement('button');
+            btn.className = 'stack-btn';
+            btn.textContent = `Stack ${i + 1}`;
+            btn.dataset.stack = i;
+            btn.addEventListener('click', () => this.selectStack(i));
+            this.stackSelector.appendChild(btn);
+        }
+        this.updateStackButtons();
+    }
+    
+    updateStackButtons() {
+        const buttons = this.stackSelector.querySelectorAll('.stack-btn');
+        buttons.forEach((btn, i) => {
+            btn.classList.toggle('active', i === this.currentStack);
+        });
+    }
+    
+    selectStack(index) {
+        if (index === this.currentStack) return;
+        this.currentStack = index;
+        this.updateStackButtons();
         this.startNewGame();
     }
     
     startNewGame() {
-        // Clear existing cards
         this.cardsContainer.innerHTML = '';
         this.cards = [];
         this.attemptedCards.clear();
         this.currentWords = [];
         
-        // Hide score display
         this.scoreDisplay.style.display = 'none';
         
-        // Get 12 words
-        const wordCount = 12;
-        this.currentWords = this.getRandomWords(wordCount);
+        const pool = wordStacks[this.currentStack];
+        this.currentWords = this.getRandomWords(pool, CARDS_PER_STACK);
         
-        // Create cards
         this.currentWords.forEach((word, index) => {
             this.createCard(word, index);
         });
         
-        // Update stats
         this.updateStats();
     }
     
-    getRandomWords(count) {
-        const shuffled = [...sightWords].sort(() => 0.5 - Math.random());
+    getRandomWords(pool, count) {
+        const shuffled = [...pool].sort(() => 0.5 - Math.random());
         return shuffled.slice(0, count);
     }
     
