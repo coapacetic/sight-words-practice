@@ -35,6 +35,37 @@ header p {
     opacity: 0.9;
 }
 
+.stack-selector {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.stack-btn {
+    background: rgba(255,255,255,0.2);
+    color: white;
+    border: 2px solid rgba(255,255,255,0.4);
+    padding: 8px 18px;
+    font-size: 0.95rem;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.stack-btn:hover {
+    background: rgba(255,255,255,0.35);
+    transform: translateY(-2px);
+}
+
+.stack-btn.active {
+    background: #ff6b6b;
+    border-color: #ff6b6b;
+    box-shadow: 0 4px 15px rgba(255,107,107,0.4);
+}
+
 .header-buttons {
     display: flex;
     gap: 15px;
