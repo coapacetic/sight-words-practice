@@ -38,6 +38,7 @@ class SightWordsGame {
         this.attemptedCards = new Set();
         this.currentWords = [];
         this.scoreHistory = [];
+        this.hasBeenGraded = false;
         
         this.init();
     }
@@ -57,6 +58,9 @@ class SightWordsGame {
         
         // Hide score display
         this.scoreDisplay.style.display = 'none';
+        
+        this.hasBeenGraded = false;
+        this.gradeBtn.disabled = false;
         
         // Get 12 words
         const wordCount = 12;
@@ -135,6 +139,8 @@ class SightWordsGame {
     }
     
     gradePerformance() {
+        if (this.hasBeenGraded) return;
+        
         const score = this.attemptedCards.size;
         const total = this.cards.length;
         const percentage = Math.round((score / total) * 100);
@@ -157,6 +163,9 @@ class SightWordsGame {
         
         this.scoreMessage.textContent = message;
         this.scoreDisplay.style.display = 'block';
+        
+        this.hasBeenGraded = true;
+        this.gradeBtn.disabled = true;
         
         this.scoreHistory.push({ round: this.scoreHistory.length + 1, percentage });
         this.renderScoreHistory();
