@@ -98,8 +98,15 @@ header p {
     background: #ff5252;
 }
 
-#gradeBtn:hover {
+#gradeBtn:hover:not(:disabled) {
     background: #45b7b0;
+}
+
+#gradeBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
 
 .cards-grid {
@@ -206,6 +213,43 @@ footer {
 .score-message {
     font-size: 1.1rem;
     opacity: 0.9;
+}
+
+.score-history {
+    background: rgba(255,255,255,0.2);
+    padding: 20px 30px;
+    border-radius: 25px;
+    margin-top: 15px;
+    backdrop-filter: blur(10px);
+    text-align: center;
+}
+
+.score-history h3 {
+    font-size: 1.3rem;
+    margin-bottom: 12px;
+}
+
+.score-history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.score-history-row {
+    display: flex;
+    justify-content: space-between;
+    background: rgba(255,255,255,0.15);
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-size: 1rem;
+}
+
+.score-history-summary {
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255,255,255,0.3);
 }
 
 @media (max-width: 768px) {
